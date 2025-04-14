@@ -1,0 +1,67 @@
+/* Reset de base pour uniformiser les styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* Corps de la popup */
+body {
+  background-color: #f9f9f9;
+  padding: 20px;
+  width: 350px;
+  height: 350px;
+  color: #333;
+}
+
+/* Titre principal */
+h1 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #1a1a1a;
+}
+
+/* Conteneur du menu déroulant */
+.dropdown {
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+/* Menu déroulant stylisé */
+.dropdown-content {
+  width: 100%;
+  padding: 8px 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #fff;
+  transition: border-color 0.3s ease;
+}
+
+.dropdown-content:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Bouton de génération */
+#generate {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#generate:hover {
+  background-color: #0056b3;
+}
+
+#generate:active {
+  background-color: #003f7f;
+}

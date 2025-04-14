@@ -30,6 +30,9 @@ Wondering how DocGen makes your life easier? Here's how:
 - Export options (PDF, Markdown, Notion sync, etc.)
 - AI model selection
 - Custom formatting rules
+- Hot reload
+- Implement react
+- Implement docker for multi members
 
 ---
 
