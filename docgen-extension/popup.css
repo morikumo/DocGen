@@ -65,3 +65,41 @@ h1 {
 #generate:active {
   background-color: #003f7f;
 }
+
+/* Conteneur pour le range slider */
+.range-container {
+  margin-bottom: 20px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Style du range input */
+.range-slider {
+  width: 80%;
+  height: 10px;
+  background: #ddd;
+  border-radius: 5px;
+  transition: background 0.3s ease;
+}
+
+.range-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #007bff;
+  cursor: pointer;
+}
+
+.range-slider::-webkit-slider-thumb:hover {
+  background: #0056b3;
+}
+
+/* Affichage de la valeur du slider à côté */
+#rangeValue {
+  font-size: 1.2rem;
+  margin-left: 10px;
+  font-weight: bold;
+  color: #007bff;
+}
