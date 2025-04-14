@@ -15,10 +15,17 @@ const rangeValue = document.getElementById('rangeValue') as HTMLSpanElement;
 
 // S'assurer que les éléments sont bien présents
 if (rangeSlider && rangeValue) {
-  // Fonction qui met à jour la valeur affichée du slider
+  // Fonction qui met à jour la valeur affichée du slider avec la plage correspondante
   const updateRangeValue = (): void => {
-    console.log(`okayyyy : ${typeof rangeSlider.value}`);
-    rangeValue.textContent = rangeSlider.value;
+    const value = parseInt(rangeSlider.value, 10); // Récupère la valeur du slider sous forme de nombre
+
+    if (value <= 5) {
+      rangeValue.textContent = '1 to 5';
+    } else if (value <= 10) {
+      rangeValue.textContent = '5 to 10';
+    } else {
+      rangeValue.textContent = '10 or +';
+    }
   };
   
   // Met à jour la valeur à chaque changement de slider
