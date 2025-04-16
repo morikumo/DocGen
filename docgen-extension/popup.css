@@ -103,3 +103,20 @@ h1 {
   font-weight: bold;
   color: #007bff;
 }
+
+.prompt {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  resize:vertical;
+  min-height: 40px;
+  line-height: 20px;
+  padding: 10px;
+  background-color: rgb(196, 196, 196);
+  font-weight: bolder;
+}
+
+.prompt[contenteditable]:empty::before {
+  content: "Describe your resume ->";
+  color:black;
+}
