@@ -41,6 +41,29 @@ if (userInput && sendBtn) {
   });
 }
 
+const apiKey = import.meta.env.VITE_API_KEY;
+
+async function sendToMistral(prompt: string) {
+  const response = await fetch('https://api.aimlapi.com/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer ${apiKey}',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      model: 'mistralai/Mistral-7B-Instruct-v0.1',
+      messages: [
+        { role: 'system', content: 'You are an AI assistant who knows everything.' },
+        { role: 'user', content: prompt }
+      ]
+    })
+  });
+
+  const data = await response.json();
+  console.log("Réponse IA :", data.choices[0].message.content);
+}
+
+
 function processInput(promptText: string) {
   // Envoie à une API
   console.log("Traitement du prompt :", promptText);
