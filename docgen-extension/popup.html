@@ -7,24 +7,27 @@
 </head>
 <body>
   <h1>DocGen</h1>
+
+  <!-- Dorpdown theme selection-->
   <div class="dropdown">
+    <label class="dropdown-title">Choose your theme</label>
     <select class="dropdown-content">
-      <option value="option1">Law</option>
-      <option value="option2">Code</option>
-      <option value="option3">Child</option>
+      <option value="Law">Law</option>
+      <option value="Code">Code</option>
+      <option value="Childway">Childway</option>
     </select>
   </div>
   
   <!-- Slider Range -->
   <div class="range-container">
-    <label for="range">Sélectionnez une plage :</label>
+    <label for="range">Number of pages for your resume :</label>
     <input type="range" id="range" class="range-slider" min="1" max="11" step="5" value="1">
     <span id="rangeValue">1</span>
   </div>
 
   <!-- Prompt -->
    <div>
-    <span role="textbox" class="prompt" contenteditable></span>
+    <span role="textbox" class="prompt" id="prompt" contenteditable></span>
    </div>
 
    <div>

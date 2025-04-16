@@ -1,17 +1,7 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const button = document.getElementById("theme-button")
-  const list = document.getElementById("theme")
-  
-  if (button && list) {
-    button.addEventListener("click", () => {
-      list.classList.toggle("hidden")
-    })
-  }
-})
-
+/* SLIDER RANGES*/
 // Sélectionner les éléments du DOM
-const rangeSlider = document.getElementById('range') as HTMLInputElement;
-const rangeValue = document.getElementById('rangeValue') as HTMLSpanElement;
+const rangeSlider: HTMLInputElement = document.getElementById('range') as HTMLInputElement;
+const rangeValue: HTMLSpanElement = document.getElementById('rangeValue') as HTMLSpanElement;
 
 // S'assurer que les éléments sont bien présents
 if (rangeSlider && rangeValue) {
@@ -34,3 +24,8 @@ if (rangeSlider && rangeValue) {
   // Initialiser la valeur dès le chargement de la page
   updateRangeValue();
 }
+
+/* USER INPUT*/
+const userInput: HTMLInputElement = document.getElementById('prompt') as HTMLInputElement;
+
+console.log(userInput);
