@@ -35,12 +35,6 @@ const sendBtn: HTMLButtonElement = document.getElementById('generate') as HTMLBu
 //Recupération de la clé api via l'env
 const apiKey = import.meta.env.VITE_API_KEY;
 
-// Fonction d'exemple
-function handleGeneration(theme: string, pages: number) {
-  console.log(`Génération du résumé sur le thème "${theme}" avec une longueur de ${pages} pages.`);
-}
-
-
 /* AI CALL FOR RESUME */
 async function sendToMistral(prompt: string, pages: number, theme: string) {
   const response = await fetch('https://api.aimlapi.com/v1/chat/completions', {
