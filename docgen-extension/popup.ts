@@ -26,6 +26,22 @@ if (rangeSlider && rangeValue) {
 }
 
 /* USER INPUT*/
-const userInput: HTMLInputElement = document.getElementById('prompt') as HTMLInputElement;
+const userInput: HTMLSpanElement = document.getElementById('prompt') as HTMLSpanElement;
+const sendBtn: HTMLButtonElement = document.getElementById('generate') as HTMLButtonElement;
 
-console.log(userInput);
+if (userInput && sendBtn) {
+  sendBtn.addEventListener('click', () => {
+    const inputValue = userInput.textContent?.trim() || ''; // on récupère le texte saisi
+
+    if (inputValue) {
+      processInput(inputValue); //Le prompt à envoyer
+    } else {
+      console.log("L'utilisateur n'a rien saisi.");
+    }
+  });
+}
+
+function processInput(promptText: string) {
+  // Envoie à une API
+  console.log("Traitement du prompt :", promptText);
+}
