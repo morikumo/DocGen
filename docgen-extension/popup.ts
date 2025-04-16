@@ -25,35 +25,34 @@ if (rangeSlider && rangeValue) {
   updateRangeValue();
 }
 
-/* USER INPUT*/
+/* WE TOOK THE NUMBER OF PAGES AND THE THEME SELECTED */
+
+// Récupération des éléments du DOM
+const dropdown = document.querySelector('.dropdown-content') as HTMLSelectElement;
+const generateBtn = document.getElementById('generate') as HTMLButtonElement;
 const userInput: HTMLSpanElement = document.getElementById('prompt') as HTMLSpanElement;
 const sendBtn: HTMLButtonElement = document.getElementById('generate') as HTMLButtonElement;
-
-if (userInput && sendBtn) {
-  sendBtn.addEventListener('click', () => {
-    const inputValue = userInput.textContent?.trim() || ''; // on récupère le texte saisi
-
-    if (inputValue) {
-      processInput(inputValue); //Le prompt à envoyer
-    } else {
-      console.log("L'utilisateur n'a rien saisi.");
-    }
-  });
-}
-
+//Recupération de la clé api via l'env
 const apiKey = import.meta.env.VITE_API_KEY;
 
-async function sendToMistral(prompt: string) {
+// Fonction d'exemple
+function handleGeneration(theme: string, pages: number) {
+  console.log(`Génération du résumé sur le thème "${theme}" avec une longueur de ${pages} pages.`);
+}
+
+
+/* AI CALL FOR RESUME */
+async function sendToMistral(prompt: string, pages: number, theme: string) {
   const response = await fetch('https://api.aimlapi.com/v1/chat/completions', {
     method: 'POST',
     headers: {
-      'Authorization': 'Bearer ${apiKey}',
+      'Authorization': `Bearer ${apiKey}`,
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
       model: 'mistralai/Mistral-7B-Instruct-v0.1',
       messages: [
-        { role: 'system', content: 'You are an AI assistant who knows everything.' },
+        { role: 'system', content: `You will resume the text in ${pages} with the ${theme} theme`  }, //Change the prompt with your needs
         { role: 'user', content: prompt }
       ]
     })
@@ -64,7 +63,27 @@ async function sendToMistral(prompt: string) {
 }
 
 
-function processInput(promptText: string) {
+/* RENDERING */
+function processInput(promptText: string, pages: number, theme: string) {
   // Envoie à une API
   console.log("Traitement du prompt :", promptText);
+  console.log("Réponse : ", sendToMistral(promptText, pages, theme));
+}
+
+const selectedOption = dropdown.value;
+const sliderValue = parseInt(rangeSlider.value, 10);
+console.log('Option choisie :', selectedOption);
+console.log('Valeur du slider :', sliderValue);
+
+/* USER INPUT*/
+if (userInput && sendBtn) {
+  sendBtn.addEventListener('click', () => {
+    const inputValue = userInput.textContent?.trim() || ''; // on récupère le texte saisi
+
+    if (inputValue) {
+      processInput(inputValue, sliderValue, selectedOption); //Le prompt à envoyer
+    } else {
+      console.log("L'utilisateur n'a rien saisi.");
+    }
+  });
 }
