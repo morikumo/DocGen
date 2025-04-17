@@ -27,16 +27,20 @@ if (rangeSlider && rangeValue) {
 
 /* WE TOOK THE NUMBER OF PAGES AND THE THEME SELECTED */
 
-// Récupération des éléments du DOM
 const dropdown = document.querySelector('.dropdown-content') as HTMLSelectElement;
 const generateBtn = document.getElementById('generate') as HTMLButtonElement;
 const userInput: HTMLSpanElement = document.getElementById('prompt') as HTMLSpanElement;
 const sendBtn: HTMLButtonElement = document.getElementById('generate') as HTMLButtonElement;
 //Recupération de la clé api via l'env
-const apiKey = import.meta.env.VITE_API_KEY;
+const apiKey = "1";
+
+
 
 /* AI CALL FOR RESUME */
 async function sendToMistral(prompt: string, pages: number, theme: string) {
+  const newPages: number = Math.floor(Math.random() * pages); // je vais devoir crée un random en fonction de l'index pour le nombre de pages
+  console.log(`arguments : ${prompt} + ${pages} and new ${newPages} + ${theme}`)
+
   const response = await fetch('https://api.aimlapi.com/v1/chat/completions', {
     method: 'POST',
     headers: {
@@ -57,6 +61,7 @@ async function sendToMistral(prompt: string, pages: number, theme: string) {
 }
 
 
+
 /* RENDERING */
 function processInput(promptText: string, pages: number, theme: string) {
   // Envoie à une API
@@ -65,17 +70,14 @@ function processInput(promptText: string, pages: number, theme: string) {
 }
 
 const selectedOption = dropdown.value;
-const sliderValue = parseInt(rangeSlider.value, 10);
-console.log('Option choisie :', selectedOption);
-console.log('Valeur du slider :', sliderValue);
+
 
 /* USER INPUT*/
 if (userInput && sendBtn) {
   sendBtn.addEventListener('click', () => {
     const inputValue = userInput.textContent?.trim() || ''; // on récupère le texte saisi
-
     if (inputValue) {
-      processInput(inputValue, sliderValue, selectedOption); //Le prompt à envoyer
+      processInput(inputValue, parseInt(rangeSlider.value, 10), selectedOption); //Le prompt à envoyer
     } else {
       console.log("L'utilisateur n'a rien saisi.");
     }
