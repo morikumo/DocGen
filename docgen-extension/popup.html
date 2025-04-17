@@ -7,14 +7,25 @@
 </head>
 <body>
   <h1>DocGen</h1>
-
+  
   <!-- Dorpdown theme selection-->
   <div class="dropdown">
     <label class="dropdown-title">Choose your theme</label>
     <select class="dropdown-content">
+      
       <option value="Law">Law</option>
       <option value="Code">Code</option>
-      <option value="Childway">Childway</option>
+      <option value="Academic">Academic</option>
+      <option value="Childlike">Childlike</option>
+      <option value="Legal">Legal</option>
+      <option value="Logical">Logical</option>
+      <option value="Creative">Creative</option>
+      <option value="Professional">Professional</option>
+      <option value="Technical">Technical</option>
+      <option value="Pedagogical">Pedagogical</option>
+      <option value="Satirical">Satirical</option>
+      <option value="Scientific">Scientific</option>
+      
     </select>
   </div>
   
@@ -24,16 +35,26 @@
     <input type="range" id="range" class="range-slider" min="1" max="11" step="5" value="1">
     <span id="rangeValue">1</span>
   </div>
-
+  
   <!-- Prompt -->
-   <div>
+  <div>
     <span role="textbox" class="prompt" id="prompt" contenteditable></span>
-   </div>
-
-   <div>
+  </div>
+  
+  <!-- Generate-->
+  <div>
     <br/>
-     <button id="generate">Generate</button>
+    <button id="generate">Generate</button>
+  </div>
+  
+  <!-- Rendering -->
+  <div id="output-container" style="display: none;">
+    <div id="output" class="output-area"></div>
+    <div class="output-actions">
+      <button id="copyBtn">Copy</button>
+      <button id="downloadBtn">Download</button>
     </div>
+  </div>
   
   <script src="dist/popup.js"></script>
 </body>
