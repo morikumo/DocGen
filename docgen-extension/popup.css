@@ -160,3 +160,22 @@ h1 {
 .output-actions button:hover {
   background-color: #005fa3;
 }
+
+
+/* EXTRACT BUTTON STYLE*/
+#extract-pdf-text-button {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 2%;
+}
+
+#extract-pdf-text-button:hover {
+  background-color: #0056b3;
+}

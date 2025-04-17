@@ -9,5 +9,5 @@
     "lib": ["DOM", "ES2020"],
     "skipLibCheck": true
   },
-  "include": ["popup.ts", "env.d.ts"]
+  "include": ["popup.ts", "./types/*",]
 }

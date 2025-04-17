@@ -1,4 +1,4 @@
-/* SLIDER RANGES*/
+/* ******************************* SLIDER RANGES ******************************* */
 // Sélectionner les éléments du DOM
 const rangeSlider: HTMLInputElement = document.getElementById('range') as HTMLInputElement;
 const rangeValue: HTMLSpanElement = document.getElementById('rangeValue') as HTMLSpanElement;
@@ -25,7 +25,7 @@ if (rangeSlider && rangeValue) {
   updateRangeValue();
 }
 
-/* WE TOOK THE NUMBER OF PAGES AND THE THEME SELECTED */
+/* ******************************* WE TOOK THE NUMBER OF PAGES AND THE THEME SELECTED  ******************************* */
 
 const dropdown = document.querySelector('.dropdown-content') as HTMLSelectElement;
 const generateBtn = document.getElementById('generate') as HTMLButtonElement;
@@ -35,7 +35,8 @@ const sendBtn: HTMLButtonElement = document.getElementById('generate') as HTMLBu
 const apiKey = "1";
 
 
-/* RANDOM NUMBER OF PAGES IN THE RANGE CHOSEN BY THE USER */
+
+/* ******************************* RANDOM NUMBER OF PAGES IN THE RANGE CHOSEN BY THE USER ******************************* */
 function getRandomPageCount(sliderValue: number): number {
   if (sliderValue === 1) {
     // Plage 1 à 5
@@ -59,7 +60,7 @@ function getRandomInt(min: number, max: number): number {
 
 
 
-/* AI CALL FOR RESUME */
+/* ******************************* AI CALL FOR RESUME ******************************* */
 async function sendToMistral(prompt: string, pages: number, theme: string) {
   console.log(`arguments : ${prompt} + ${pages} + ${theme}`)
 
@@ -85,7 +86,7 @@ async function sendToMistral(prompt: string, pages: number, theme: string) {
 
 
 
-/* USER INPUT*/
+/* ******************************* USER INPUT ******************************* */
 if (userInput && sendBtn) {
   sendBtn.addEventListener('click', () => {
     const inputValue = userInput.textContent?.trim() || ''; // on récupère le texte saisi
@@ -99,7 +100,7 @@ if (userInput && sendBtn) {
 
 
 
-/* RENDERING */
+/* ******************************* RENDERING ******************************* */
 function processInput(promptText: string, pages: number, theme: string) {
   // Envoie à une API
   console.log("Traitement du prompt :", promptText);
@@ -109,7 +110,7 @@ function processInput(promptText: string, pages: number, theme: string) {
   });
 }
 
-/* THE OUTPUT */
+/* ******************************* THE OUTPUT ******************************* */
 function displayOutput(text: string){
   const outputContainer = document.getElementById('output-container')!;
   const outputArea = document.getElementById('output')!;
@@ -118,7 +119,7 @@ function displayOutput(text: string){
 }
 
 
-/* COPY BUTTON */
+/* ******************************* COPY BUTTON ********************** */
 function copyToClipboard(): void {
   const output = document.getElementById('output')!;
   navigator.clipboard.writeText(output.textContent || '').then(() => {
@@ -127,7 +128,7 @@ function copyToClipboard(): void {
 }
 
 
-/* DOWNLOAD BUTTON */
+/* ********************* DOWNLOAD BUTTON **************************** */
 function downloadAsTxt(): void {
   const content = document.getElementById('output')!.textContent || '';
   const blob = new Blob([content], { type: 'text/plain' });
@@ -145,3 +146,53 @@ const downloadBtn = document.getElementById('downloadBtn') as HTMLButtonElement;
 
 copyBtn.addEventListener('click', copyToClipboard);
 downloadBtn.addEventListener('click', downloadAsTxt);
+
+
+/* *************PDF EXTRACTION THROUGTH NAVIGATOR ******************/
+
+declare const pdfjsLib: any;
+
+// Sélectionne le bouton d'extraction du texte du PDF dans le DOM
+const extractPdfButton = document.getElementById('extract-pdf-text-button') as HTMLButtonElement;
+
+// Vérifie si le bouton existe avant de lui associer un événement
+if (extractPdfButton) {
+  extractPdfButton.addEventListener('click', extractTextFromCurrentPDF);
+}
+
+// Fonction pour vérifier si l'URL correspond à un fichier PDF
+function isPDFUrl(url: string): boolean {
+  return /\.pdf(\?.*)?$/i.test(url);
+}
+
+// Fonction pour extraire le texte du PDF courant
+async function extractTextFromCurrentPDF(): Promise<void> {
+  const url = window.location.href;
+
+  if (!isPDFUrl(url)) {
+    alert(`Ce n'est pas un fichier PDF. Voila ce qui est reçu ${url}`);
+    return;
+  }
+
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+  try {
+    const loadingTask = pdfjsLib.getDocument(url);
+    const pdf = await loadingTask.promise;
+    let fullText = '';
+
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const page = await pdf.getPage(i);
+      const content = await page.getTextContent();
+      const strings = content.items.map((item: any) => item.str || '');
+      fullText += strings.join(' ') + '\n';
+    }
+
+    console.log('Texte extrait du PDF :\n', fullText);
+  } catch (err) {
+    console.error('Erreur lors de la lecture du PDF :', err);
+  }
+}
+
+

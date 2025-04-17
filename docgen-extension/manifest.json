@@ -10,7 +10,7 @@
   "icons": {
     "128": "assets/icon.png"
   },
-  "permissions": [],
+  "permissions": ["activeTabs"],
   "background": {
     "service_worker": "dist/popup.js"
   }
