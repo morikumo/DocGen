@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "DocGen Extension",
   "version": "1.0",
-  "description": "Extension simple en TypeScript",
+  "description": "Extension for generative documentation.",
   "action": {
     "default_popup": "popup.html",
     "default_icon": "assets/icon.png"
@@ -10,8 +10,15 @@
   "icons": {
     "128": "assets/icon.png"
   },
-  "permissions": ["activeTabs"],
-  "background": {
-    "service_worker": "dist/popup.js"
-  }
+  "permissions": [
+    "activeTab",
+    "tabs"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["dist/content.js"],
+      "run_at": "document_idle"
+    }
+  ]
 }

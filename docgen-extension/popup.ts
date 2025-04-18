@@ -150,49 +150,34 @@ downloadBtn.addEventListener('click', downloadAsTxt);
 
 /* *************PDF EXTRACTION THROUGTH NAVIGATOR ******************/
 
-declare const pdfjsLib: any;
 
-// Sélectionne le bouton d'extraction du texte du PDF dans le DOM
-const extractPdfButton = document.getElementById('extract-pdf-text-button') as HTMLButtonElement;
-
-// Vérifie si le bouton existe avant de lui associer un événement
-if (extractPdfButton) {
-  extractPdfButton.addEventListener('click', extractTextFromCurrentPDF);
-}
-
-// Fonction pour vérifier si l'URL correspond à un fichier PDF
-function isPDFUrl(url: string): boolean {
-  return /\.pdf(\?.*)?$/i.test(url);
-}
-
-// Fonction pour extraire le texte du PDF courant
-async function extractTextFromCurrentPDF(): Promise<void> {
-  const url = window.location.href;
-
-  if (!isPDFUrl(url)) {
-    alert(`Ce n'est pas un fichier PDF. Voila ce qui est reçu ${url}`);
-    return;
-  }
-
-  pdfjsLib.GlobalWorkerOptions.workerSrc =
-    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-
-  try {
-    const loadingTask = pdfjsLib.getDocument(url);
-    const pdf = await loadingTask.promise;
-    let fullText = '';
-
-    for (let i = 1; i <= pdf.numPages; i++) {
-      const page = await pdf.getPage(i);
-      const content = await page.getTextContent();
-      const strings = content.items.map((item: any) => item.str || '');
-      fullText += strings.join(' ') + '\n';
+document.addEventListener('DOMContentLoaded', function() {
+  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+    console.log("Tabs trouvés:", tabs); // Affiche l'objet tabs complet
+    
+    if (tabs && tabs.length > 0) {
+      const activeTab = tabs[0];
+      console.log("Onglet actif:", activeTab);
+      
+      const activeTabUrl = activeTab.url;
+      console.log("URL:", activeTabUrl);
+      
+      if (activeTabUrl) {
+        if (isPDFUrl(activeTabUrl)) {
+          alert(`C'est un fichier PDF !!! URL : ${activeTabUrl}`);
+        } else {
+          alert(`Ce n'est pas un fichier PDF. URL reçue : ${activeTabUrl}`);
+        }
+      } else {
+        alert("URL indéfinie. Vérifiez les permissions dans le manifest.");
+      }
+    } else {
+      alert("Aucun onglet actif trouvé.");
     }
+  });
+});
 
-    console.log('Texte extrait du PDF :\n', fullText);
-  } catch (err) {
-    console.error('Erreur lors de la lecture du PDF :', err);
-  }
+// Vérifie si l'URL est un lien vers un PDF
+function isPDFUrl(url: string | undefined): boolean {
+  return typeof url === 'string' && /\.pdf(\?.*)?$/i.test(url);
 }
-
-
