@@ -26,7 +26,6 @@ if (rangeSlider && rangeValue) {
 }
 
 /* ******************************* WE TOOK THE NUMBER OF PAGES AND THE THEME SELECTED  ******************************* */
-
 const dropdown = document.querySelector('.dropdown-content') as HTMLSelectElement;
 const generateBtn = document.getElementById('generate') as HTMLButtonElement;
 const userInput: HTMLSpanElement = document.getElementById('prompt') as HTMLSpanElement;
@@ -149,8 +148,6 @@ downloadBtn.addEventListener('click', downloadAsTxt);
 
 
 /* *************PDF EXTRACTION THROUGTH NAVIGATOR ******************/
-
-
 document.addEventListener('DOMContentLoaded', function() {
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
     console.log("Tabs trouvés:", tabs); // Affiche l'objet tabs complet
