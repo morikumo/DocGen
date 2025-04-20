@@ -72,7 +72,7 @@ async function sendToMistral(prompt: string, pages: number, theme: string) {
     body: JSON.stringify({
       model: 'mistralai/Mistral-7B-Instruct-v0.1',
       messages: [
-        { role: 'system', content: `You will resume the text in ${pages} pages with the ${theme} theme` }, //Change the prompt with your needs
+        { role: 'system', content: `You will resume the text in ${pages} pages with the ${theme} theme about this url ${activeTabUrl}` }, //Change the prompt with your needs
         { role: 'user', content: prompt }
       ]
     })
@@ -88,7 +88,7 @@ async function sendToMistral(prompt: string, pages: number, theme: string) {
 if (userInput && sendBtn) {
   sendBtn.addEventListener('click', () => {
     const inputValue = userInput.textContent?.trim() || ''; // on récupère le texte saisi
-    if (inputValue) {
+    if (inputValue && activeTabUrl) {
       processInput(inputValue, getRandomPageCount(parseInt(rangeSlider.value, 10)), dropdown.value); //Le prompt à envoyer
     } else {
       console.log("L'utilisateur n'a rien saisi.");
@@ -102,7 +102,6 @@ if (userInput && sendBtn) {
 function processInput(promptText: string, pages: number, theme: string) {
   // Envoie à une API
   console.log("Traitement du prompt :", promptText);
-  //console.log("Réponse : ", sendToMistral(promptText, pages, theme));
   sendToMistral(promptText, pages, theme).then((inputValue) => {
     displayOutput(inputValue);
   });
@@ -146,6 +145,8 @@ const extractBtn = document.getElementById('extract-pdf-text-button') as HTMLBut
 
 /* *************PDF EXTRACTION THROUGTH NAVIGATOR ******************/
 
+let activeTabUrl: string | undefined = '';
+
 const extract = () => {
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
     console.log("Tabs trouvés:", tabs); // Affiche l'objet tabs complet
@@ -154,12 +155,13 @@ const extract = () => {
       const activeTab = tabs[0];
       console.log("Onglet actif:", activeTab);
       
-      const activeTabUrl = activeTab.url;
+      activeTabUrl = activeTab.url;
       console.log("URL:", activeTabUrl);
       
       if (activeTabUrl) {
         if (isPDFUrl(activeTabUrl)) {
           alert(`C'est un fichier PDF !!! URL : ${activeTabUrl}`);
+          return activeTabUrl;
           // Vous pourriez faire quelque chose avec l'URL ici
         } else {
           alert(`Ce n'est pas un fichier PDF. URL reçue : ${activeTabUrl}`);
