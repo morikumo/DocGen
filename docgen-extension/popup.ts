@@ -8,7 +8,7 @@ if (rangeSlider && rangeValue) {
   // Fonction qui met à jour la valeur affichée du slider avec la plage correspondante
   const updateRangeValue = (): void => {
     const value = parseInt(rangeSlider.value, 10); // Récupère la valeur du slider sous forme de nombre
-
+    
     if (value <= 5) {
       rangeValue.textContent = '1 to 5';
     } else if (value <= 10) {
@@ -62,7 +62,7 @@ function getRandomInt(min: number, max: number): number {
 /* ******************************* AI CALL FOR RESUME ******************************* */
 async function sendToMistral(prompt: string, pages: number, theme: string) {
   console.log(`arguments : ${prompt} + ${pages} + ${theme}`)
-
+  
   const response = await fetch('https://api.aimlapi.com/v1/chat/completions', {
     method: 'POST',
     headers: {
@@ -77,12 +77,11 @@ async function sendToMistral(prompt: string, pages: number, theme: string) {
       ]
     })
   });
-
+  
   const data = await response.json();
   console.log("Réponse IA :", data.choices[0].message.content);
   return data.choices[0].message.content;
 }
-
 
 
 /* ******************************* USER INPUT ******************************* */
@@ -137,18 +136,17 @@ function downloadAsTxt(): void {
   a.download = 'resume.txt';
   a.click();
   URL.revokeObjectURL(url);
-
+  
 }
 
 const copyBtn = document.getElementById('copyBtn') as HTMLButtonElement;
 const downloadBtn = document.getElementById('downloadBtn') as HTMLButtonElement;
-
-copyBtn.addEventListener('click', copyToClipboard);
-downloadBtn.addEventListener('click', downloadAsTxt);
+const extractBtn = document.getElementById('extract-pdf-text-button') as HTMLButtonElement;
 
 
 /* *************PDF EXTRACTION THROUGTH NAVIGATOR ******************/
-document.addEventListener('DOMContentLoaded', function() {
+
+const extract = () => {
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
     console.log("Tabs trouvés:", tabs); // Affiche l'objet tabs complet
     
@@ -162,6 +160,7 @@ document.addEventListener('DOMContentLoaded', function() {
       if (activeTabUrl) {
         if (isPDFUrl(activeTabUrl)) {
           alert(`C'est un fichier PDF !!! URL : ${activeTabUrl}`);
+          // Vous pourriez faire quelque chose avec l'URL ici
         } else {
           alert(`Ce n'est pas un fichier PDF. URL reçue : ${activeTabUrl}`);
         }
@@ -172,9 +171,18 @@ document.addEventListener('DOMContentLoaded', function() {
       alert("Aucun onglet actif trouvé.");
     }
   });
-});
+}
 
 // Vérifie si l'URL est un lien vers un PDF
 function isPDFUrl(url: string | undefined): boolean {
   return typeof url === 'string' && /\.pdf(\?.*)?$/i.test(url);
 }
+
+
+const ytes = () => {
+  console.log('yes');
+}
+
+copyBtn.addEventListener('click', copyToClipboard);
+downloadBtn.addEventListener('click', downloadAsTxt);
+extractBtn.addEventListener('click', extract);
