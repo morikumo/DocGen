@@ -32,7 +32,7 @@ const sendBtn: HTMLButtonElement = document.getElementById('generate') as HTMLBu
 const copyBtn = document.getElementById('copyBtn') as HTMLButtonElement;
 const downloadBtn = document.getElementById('downloadBtn') as HTMLButtonElement;
 //Recupération de la clé api via l'env
-const apiKey = "af47b62950c741e8a4439b9f1e8f2fb5";
+const apiKey = "u";
 
 
 /* ******************************* RANDOM NUMBER OF PAGES IN THE RANGE CHOSEN BY THE USER ******************************* */
