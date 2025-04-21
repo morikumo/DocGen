@@ -25,17 +25,19 @@ if (rangeSlider && rangeValue) {
   updateRangeValue();
 }
 
-/* ******************************* WE TOOK THE NUMBER OF PAGES AND THE THEME SELECTED  ******************************* */
+/* ******************************* WE TOOK THE NUMBER OF PARAGRAPHES AND THE THEME SELECTED  ******************************* */
 const dropdown = document.querySelector('.dropdown-content') as HTMLSelectElement;
 const userInput: HTMLSpanElement = document.getElementById('prompt') as HTMLSpanElement;
 const sendBtn: HTMLButtonElement = document.getElementById('generate') as HTMLButtonElement;
 const copyBtn = document.getElementById('copyBtn') as HTMLButtonElement;
 const downloadBtn = document.getElementById('downloadBtn') as HTMLButtonElement;
+//Notre url
+let activeTabUrl: string | undefined = '';
 //Recupération de la clé api via l'env
 const apiKey = "u";
 
 
-/* ******************************* RANDOM NUMBER OF PAGES IN THE RANGE CHOSEN BY THE USER ******************************* */
+/* ******************************* RANDOM NUMBER OF PARAGRAPHES IN THE RANGE CHOSEN BY THE USER ******************************* */
 function getRandomPageCount(sliderValue: number): number {
   if (sliderValue === 1) {
     // Plage 1 à 5
@@ -60,8 +62,8 @@ function getRandomInt(min: number, max: number): number {
 
 
 /* ******************************* AI CALL FOR RESUME ******************************* */
-async function sendToMistral(prompt: string, pages: number, theme: string) {
-  console.log(`arguments : ${prompt} + ${pages} + ${theme} + url ${activeTabUrl}`)
+async function sendToMistral(prompt: string, paragraphes: number, theme: string) {
+  console.log(`arguments : ${prompt} + ${paragraphes} + ${theme} + url ${activeTabUrl}`)
   
   const response = await fetch('https://api.aimlapi.com/v1/chat/completions', {
     method: 'POST',
@@ -70,9 +72,9 @@ async function sendToMistral(prompt: string, pages: number, theme: string) {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      model: 'mistralai/Mistral-7B-Instruct-v0.1',// We need to change the model because it will not read pdf or i do wrong
+      model: 'gpt-4o',// We need to change the model because it will not read pdf or i do wrong
       messages: [
-        { role: 'system', content: `You will resume the text in ${pages} pages with the ${theme} theme about this url ${activeTabUrl}` }, //Change the prompt with your needs
+        { role: 'system', content: `You will resume the text in ${paragraphes} paragraphes with the ${theme} theme about this url ${activeTabUrl}` }, //Change the prompt with your needs
         { role: 'user', content: prompt }
       ]
     })
@@ -88,20 +90,25 @@ async function sendToMistral(prompt: string, pages: number, theme: string) {
 if (userInput && sendBtn) {
   sendBtn.addEventListener('click', () => {
     const inputValue = userInput.textContent?.trim() || ''; // on récupère le texte saisi
-    if (inputValue) {
+    if (inputValue && isPDFUrl(activeTabUrl)) {
       processInput(inputValue, getRandomPageCount(parseInt(rangeSlider.value, 10)), dropdown.value); //Le prompt à envoyer
-    } else {
-      console.log("L'utilisateur n'a rien saisi.");
+    } 
+    else if (inputValue && !isPDFUrl(activeTabUrl)){
+      alert("Cette page n'est pas un pdf !");
+    }
+    else {
+      alert("L'utilisateur n'a rien saisi.");
     }
   });
 }
 
 
+
 /* ******************************* RENDERING ******************************* */
-function processInput(promptText: string, pages: number, theme: string) {
+function processInput(promptText: string, paragraphes: number, theme: string) {
   // Envoie à une API
   console.log("Traitement du prompt :", promptText);
-  sendToMistral(promptText, pages, theme).then((inputValue) => {
+  sendToMistral(promptText, paragraphes, theme).then((inputValue) => {
     displayOutput(inputValue);
   });
 }
@@ -140,7 +147,6 @@ function downloadAsTxt(): void {
 
 /* *************PDF EXTRACTION THROUGTH NAVIGATOR ******************/
 
-let activeTabUrl: string | undefined = '';
 
 document.addEventListener('DOMContentLoaded', function() {
   const pdfUrlContainer = document.getElementById('url-container');
@@ -158,7 +164,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Vous pourriez faire quelque chose avec l'URL ici
       } else {
         if(pdfUrlContainer && pdfUrlElement){
-          pdfUrlElement.textContent = "undified url"
+          pdfUrlElement.textContent = "Url not a pdf"
           pdfUrlContainer.style.display = 'block';
         }
       }
