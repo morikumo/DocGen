@@ -60,6 +60,7 @@ h1 {
 
 #generate:hover {
   background-color: #0056b3;
+  transform: scale(1.02);
 }
 
 #generate:active {
@@ -162,24 +163,38 @@ h1 {
 }
 
 
-/* EXTRACT BUTTON STYLE*/
-#extract-pdf-text-button {
+#url-container{
+  font-weight: bolder;
+}
+
+#lang-container {
   width: 100%;
-  padding: 10px;
-  font-size: 1rem;
+  display: flex;
+}
+
+#lang-en,
+#lang-fr {
+  width: 50%;
+  box-sizing: border-box;
+  padding: 4px;
   background-color: #007bff;
   color: white;
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin-top: 2%;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  text-align: center;
+  margin-right: 5px;
 }
 
-#extract-pdf-text-button:hover {
+#lang-en:hover,
+#lang-fr:hover {
   background-color: #0056b3;
+  transform: scale(1.02);
 }
 
-#url-container{
-  font-weight: bolder;
+input[type="radio"]:checked + label {
+  background-color: #0056b3 !important;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
+  transform: scale(1.02);
 }

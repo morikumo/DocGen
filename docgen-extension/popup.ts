@@ -1,13 +1,26 @@
-/* ******************************* SLIDER RANGES ******************************* */
-// Sélectionner les éléments du DOM
+/* ******************************* INITIALIZATION ******************************* */
 const rangeSlider: HTMLInputElement = document.getElementById('range') as HTMLInputElement;
 const rangeValue: HTMLSpanElement = document.getElementById('rangeValue') as HTMLSpanElement;
+const dropdown = document.querySelector('.dropdown-content') as HTMLSelectElement;
+const userInput: HTMLSpanElement = document.getElementById('prompt') as HTMLSpanElement;
+const sendBtn: HTMLButtonElement = document.getElementById('generate') as HTMLButtonElement;
+const copyBtn = document.getElementById('copyBtn') as HTMLButtonElement;
+const downloadBtn = document.getElementById('downloadBtn') as HTMLButtonElement;
+const langBtnEN = document.getElementById('lang-en') as HTMLButtonElement;
+const langBtnFR = document.getElementById('lang-fr') as HTMLButtonElement;
+let currentLang = "English";
+const selectedLang = document.querySelector('input[name="language"]:checked') as HTMLInputElement;
+const langValue = selectedLang ? selectedLang.value : "English";
+//Notre url
+let activeTabUrl: string | undefined = '';
+//Recupération de la clé api via l'env
+const apiKey = "a";
 
-// S'assurer que les éléments sont bien présents
+/* ******************************* SLIDER RANGES ******************************* */
+
 if (rangeSlider && rangeValue) {
-  // Fonction qui met à jour la valeur affichée du slider avec la plage correspondante
   const updateRangeValue = (): void => {
-    const value = parseInt(rangeSlider.value, 10); // Récupère la valeur du slider sous forme de nombre
+    const value = parseInt(rangeSlider.value, 10);
     
     if (value <= 5) {
       rangeValue.textContent = '1 to 5';
@@ -18,38 +31,20 @@ if (rangeSlider && rangeValue) {
     }
   };
   
-  // Met à jour la valeur à chaque changement de slider
   rangeSlider.addEventListener('input', updateRangeValue);
   
-  // Initialiser la valeur dès le chargement de la page
   updateRangeValue();
 }
-
-/* ******************************* WE TOOK THE NUMBER OF PARAGRAPHES AND THE THEME SELECTED  ******************************* */
-const dropdown = document.querySelector('.dropdown-content') as HTMLSelectElement;
-const userInput: HTMLSpanElement = document.getElementById('prompt') as HTMLSpanElement;
-const sendBtn: HTMLButtonElement = document.getElementById('generate') as HTMLButtonElement;
-const copyBtn = document.getElementById('copyBtn') as HTMLButtonElement;
-const downloadBtn = document.getElementById('downloadBtn') as HTMLButtonElement;
-//Notre url
-let activeTabUrl: string | undefined = '';
-//Recupération de la clé api via l'env
-const apiKey = "u";
-
 
 /* ******************************* RANDOM NUMBER OF PARAGRAPHES IN THE RANGE CHOSEN BY THE USER ******************************* */
 function getRandomPageCount(sliderValue: number): number {
   if (sliderValue === 1) {
-    // Plage 1 à 5
     return getRandomInt(1, 5);
   } else if (sliderValue === 6) {
-    // Plage 5 à 10
     return getRandomInt(5, 10);
   } else if (sliderValue === 11) {
-    // Plage 10 à 15
     return getRandomInt(10, 15);
   } else {
-    // Valeur hors plage, on renvoie -1 ou on gère l’erreur
     console.warn("Valeur du slider non prise en charge :", sliderValue);
     return -1;
   }
@@ -60,10 +55,27 @@ function getRandomInt(min: number, max: number): number {
 }
 
 
+/* ******************************* LANGUAGE CHOOSEN ******************************* */
+function setActiveLang(lang: string, button: HTMLButtonElement) {
+  currentLang = lang;
+  
+  const langButtons = document.querySelectorAll('#lang-container button');
+  langButtons.forEach(btn => btn.classList.remove('active'));
+  
+  button.classList.add('active');
+  
+  console.log(`Langue sélectionnée: ${lang}`);
+}
+
+if (langBtnEN && langBtnFR) {
+  langBtnEN.addEventListener('click', () => setActiveLang("English", langBtnEN));
+  langBtnFR.addEventListener('click', () => setActiveLang("French", langBtnFR));
+}
+
 
 /* ******************************* AI CALL FOR RESUME ******************************* */
-async function sendToMistral(prompt: string, paragraphes: number, theme: string) {
-  console.log(`arguments : ${prompt} + ${paragraphes} + ${theme} + url ${activeTabUrl}`)
+async function sendToMistral(prompt: string, paragraphes: number, theme: string, lang: string) {
+  console.log(`arguments : ${prompt} + ${paragraphes} + ${theme} + url ${activeTabUrl}+ language ${lang}`)
   
   const response = await fetch('https://api.aimlapi.com/v1/chat/completions', {
     method: 'POST',
@@ -74,7 +86,7 @@ async function sendToMistral(prompt: string, paragraphes: number, theme: string)
     body: JSON.stringify({
       model: 'gpt-4o',// We need to change the model because it will not read pdf or i do wrong
       messages: [
-        { role: 'system', content: `You will resume the text in ${paragraphes} paragraphes with the ${theme} theme about this url ${activeTabUrl}` }, //Change the prompt with your needs
+        { role: 'system', content: `You will resume the text in ${paragraphes} paragraphes with the ${theme} theme about this url ${activeTabUrl}. Answer in the ${lang} language.` }, //Change the prompt with your needs
         { role: 'user', content: prompt }
       ]
     })
@@ -91,7 +103,12 @@ if (userInput && sendBtn) {
   sendBtn.addEventListener('click', () => {
     const inputValue = userInput.textContent?.trim() || ''; // on récupère le texte saisi
     if (inputValue && isPDFUrl(activeTabUrl)) {
-      processInput(inputValue, getRandomPageCount(parseInt(rangeSlider.value, 10)), dropdown.value); //Le prompt à envoyer
+      processInput(
+        inputValue, 
+        getRandomPageCount(parseInt(rangeSlider.value, 10)), 
+        dropdown.value, 
+        currentLang
+      ); // Le prompt à envoyer
     } 
     else if (inputValue && !isPDFUrl(activeTabUrl)){
       alert("Cette page n'est pas un pdf !");
@@ -105,10 +122,10 @@ if (userInput && sendBtn) {
 
 
 /* ******************************* RENDERING ******************************* */
-function processInput(promptText: string, paragraphes: number, theme: string) {
+function processInput(promptText: string, paragraphes: number, theme: string, lang: string) {
   // Envoie à une API
   console.log("Traitement du prompt :", promptText);
-  sendToMistral(promptText, paragraphes, theme).then((inputValue) => {
+  sendToMistral(promptText, paragraphes, theme, lang).then((inputValue) => {
     displayOutput(inputValue);
   });
 }
