@@ -8,7 +8,6 @@
     "moduleResolution": "node",
     "lib": ["DOM", "ES2020"],
     "skipLibCheck": true,
-    //"typeRoots": ["./"]  // Ajout pour s'assurer que les fichiers .d.ts à la racine sont pris en compte
   },
-  "include": ["popup.ts", "content.ts", "*.d.ts"]
+  "include": ["popup.ts", "*.d.ts"]
 }

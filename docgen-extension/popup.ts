@@ -27,12 +27,12 @@ if (rangeSlider && rangeValue) {
 
 /* ******************************* WE TOOK THE NUMBER OF PAGES AND THE THEME SELECTED  ******************************* */
 const dropdown = document.querySelector('.dropdown-content') as HTMLSelectElement;
-const generateBtn = document.getElementById('generate') as HTMLButtonElement;
 const userInput: HTMLSpanElement = document.getElementById('prompt') as HTMLSpanElement;
 const sendBtn: HTMLButtonElement = document.getElementById('generate') as HTMLButtonElement;
+const copyBtn = document.getElementById('copyBtn') as HTMLButtonElement;
+const downloadBtn = document.getElementById('downloadBtn') as HTMLButtonElement;
 //Recupération de la clé api via l'env
-const apiKey = "1";
-
+const apiKey = "af47b62950c741e8a4439b9f1e8f2fb5";
 
 
 /* ******************************* RANDOM NUMBER OF PAGES IN THE RANGE CHOSEN BY THE USER ******************************* */
@@ -61,7 +61,7 @@ function getRandomInt(min: number, max: number): number {
 
 /* ******************************* AI CALL FOR RESUME ******************************* */
 async function sendToMistral(prompt: string, pages: number, theme: string) {
-  console.log(`arguments : ${prompt} + ${pages} + ${theme}`)
+  console.log(`arguments : ${prompt} + ${pages} + ${theme} + url ${activeTabUrl}`)
   
   const response = await fetch('https://api.aimlapi.com/v1/chat/completions', {
     method: 'POST',
@@ -70,7 +70,7 @@ async function sendToMistral(prompt: string, pages: number, theme: string) {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      model: 'mistralai/Mistral-7B-Instruct-v0.1',
+      model: 'mistralai/Mistral-7B-Instruct-v0.1',// We need to change the model because it will not read pdf or i do wrong
       messages: [
         { role: 'system', content: `You will resume the text in ${pages} pages with the ${theme} theme about this url ${activeTabUrl}` }, //Change the prompt with your needs
         { role: 'user', content: prompt }
@@ -88,14 +88,13 @@ async function sendToMistral(prompt: string, pages: number, theme: string) {
 if (userInput && sendBtn) {
   sendBtn.addEventListener('click', () => {
     const inputValue = userInput.textContent?.trim() || ''; // on récupère le texte saisi
-    if (inputValue && activeTabUrl) {
+    if (inputValue) {
       processInput(inputValue, getRandomPageCount(parseInt(rangeSlider.value, 10)), dropdown.value); //Le prompt à envoyer
     } else {
       console.log("L'utilisateur n'a rien saisi.");
     }
   });
 }
-
 
 
 /* ******************************* RENDERING ******************************* */
@@ -138,53 +137,42 @@ function downloadAsTxt(): void {
   
 }
 
-const copyBtn = document.getElementById('copyBtn') as HTMLButtonElement;
-const downloadBtn = document.getElementById('downloadBtn') as HTMLButtonElement;
-const extractBtn = document.getElementById('extract-pdf-text-button') as HTMLButtonElement;
-
 
 /* *************PDF EXTRACTION THROUGTH NAVIGATOR ******************/
 
 let activeTabUrl: string | undefined = '';
 
-const extract = () => {
-  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-    console.log("Tabs trouvés:", tabs); // Affiche l'objet tabs complet
-    
+document.addEventListener('DOMContentLoaded', function() {
+  const pdfUrlContainer = document.getElementById('url-container');
+  const pdfUrlElement = document.getElementById('pdf-url');
+  
+  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {    
     if (tabs && tabs.length > 0) {
       const activeTab = tabs[0];
-      console.log("Onglet actif:", activeTab);
       
       activeTabUrl = activeTab.url;
-      console.log("URL:", activeTabUrl);
       
-      if (activeTabUrl) {
-        if (isPDFUrl(activeTabUrl)) {
-          alert(`C'est un fichier PDF !!! URL : ${activeTabUrl}`);
-          return activeTabUrl;
-          // Vous pourriez faire quelque chose avec l'URL ici
-        } else {
-          alert(`Ce n'est pas un fichier PDF. URL reçue : ${activeTabUrl}`);
-        }
+      if (activeTabUrl && isPDFUrl(activeTabUrl) && pdfUrlElement && pdfUrlContainer) {
+        pdfUrlElement.textContent = activeTabUrl;
+        pdfUrlContainer.style.display = 'block';
+        // Vous pourriez faire quelque chose avec l'URL ici
       } else {
-        alert("URL indéfinie. Vérifiez les permissions dans le manifest.");
+        if(pdfUrlContainer && pdfUrlElement){
+          pdfUrlElement.textContent = "undified url"
+          pdfUrlContainer.style.display = 'block';
+        }
       }
     } else {
       alert("Aucun onglet actif trouvé.");
     }
   });
 }
+)
 
 // Vérifie si l'URL est un lien vers un PDF
 function isPDFUrl(url: string | undefined): boolean {
   return typeof url === 'string' && /\.pdf(\?.*)?$/i.test(url);
 }
 
-
-const ytes = () => {
-  console.log('yes');
-}
-
 copyBtn.addEventListener('click', copyToClipboard);
 downloadBtn.addEventListener('click', downloadAsTxt);
-extractBtn.addEventListener('click', extract);

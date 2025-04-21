@@ -7,7 +7,14 @@
 </head>
 <body>
   <h1>DocGen</h1>
-  
+
+  <!-- Charge the url -->
+  <div id="url-container" style="display:block">
+    <p>PDF file: <span id="pdf-url"></span></p>
+    <br/>
+  </div>
+
+
   <!-- Dorpdown theme selection-->
   <div class="dropdown">
     <label class="dropdown-title">Choose your theme</label>
@@ -47,12 +54,6 @@
     <button id="generate">Generate</button>
   </div>
   
-  <!-- Extraire le texte du PDF -->
-  <div>
-    <button id="extract-pdf-text-button">Extract PDF</button>
-  </div>
-  
-  
   <!-- Rendering -->
   <div id="output-container" style="display: none;">
     <div id="output" class="output-area"></div>
@@ -60,10 +61,11 @@
       <button id="copyBtn">Copy</button>
       <button id="downloadBtn">Download</button>
     </div>
+    <br/>
   </div>
   
   <!-- WORK SCRIPT-->
-  <script src="dist/popup.js"></script>
+  <script type="module" src="dist/popup.js"></script>
   
 </body>
 </html>

@@ -14,4 +14,16 @@ declare namespace chrome {
         callback: (tabs: Tab[]) => void
       ): void;
     }
+
+    namespace storage {
+      interface StorageArea {
+        get(keys: string | string[] | Object | null, callback: (items: { [key: string]: any }) => void): void;
+        set(items: Object, callback?: () => void): void;
+        remove(keys: string | string[], callback?: () => void): void;
+        clear(callback?: () => void): void;
+      }
+      
+      const local: StorageArea;
+      const sync: StorageArea;
+    }
   }

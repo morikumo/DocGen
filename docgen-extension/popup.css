@@ -179,3 +179,7 @@ h1 {
 #extract-pdf-text-button:hover {
   background-color: #0056b3;
 }
+
+#url-container{
+  font-weight: bolder;
+}
