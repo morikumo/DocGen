@@ -14,7 +14,7 @@ const langValue = selectedLang ? selectedLang.value : "English";
 //Notre url
 let activeTabUrl: string | undefined = '';
 //Recupération de la clé api via l'env
-const apiKey = "a";
+const apiKey = "b";
 
 /* ******************************* SLIDER RANGES ******************************* */
 
