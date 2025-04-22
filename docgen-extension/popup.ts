@@ -21,7 +21,7 @@ const apiKey = "a";
 if (rangeSlider && rangeValue) {
   const updateRangeValue = (): void => {
     const value = parseInt(rangeSlider.value, 10);
-    
+
     if (value <= 5) {
       rangeValue.textContent = '1 to 5';
     } else if (value <= 10) {
@@ -30,9 +30,9 @@ if (rangeSlider && rangeValue) {
       rangeValue.textContent = '10 or +';
     }
   };
-  
+
   rangeSlider.addEventListener('input', updateRangeValue);
-  
+
   updateRangeValue();
 }
 
@@ -58,12 +58,12 @@ function getRandomInt(min: number, max: number): number {
 /* ******************************* LANGUAGE CHOOSEN ******************************* */
 function setActiveLang(lang: string, button: HTMLButtonElement) {
   currentLang = lang;
-  
+
   const langButtons = document.querySelectorAll('#lang-container button');
   langButtons.forEach(btn => btn.classList.remove('active'));
-  
+
   button.classList.add('active');
-  
+
   console.log(`Langue sélectionnée: ${lang}`);
 }
 
@@ -76,7 +76,7 @@ if (langBtnEN && langBtnFR) {
 /* ******************************* AI CALL FOR RESUME ******************************* */
 async function sendToMistral(prompt: string, paragraphes: number, theme: string, lang: string) {
   console.log(`arguments : ${prompt} + ${paragraphes} + ${theme} + url ${activeTabUrl}+ language ${lang}`)
-  
+
   const response = await fetch('https://api.aimlapi.com/v1/chat/completions', {
     method: 'POST',
     headers: {
@@ -91,7 +91,7 @@ async function sendToMistral(prompt: string, paragraphes: number, theme: string,
       ]
     })
   });
-  
+
   const data = await response.json();
   console.log("Réponse IA :", data.choices[0].message.content);
   return data.choices[0].message.content;
@@ -104,12 +104,12 @@ if (userInput && sendBtn) {
     const inputValue = userInput.textContent?.trim() || ''; // on récupère le texte saisi
     if (inputValue && isPDFUrl(activeTabUrl)) {
       processInput(
-        inputValue, 
-        getRandomPageCount(parseInt(rangeSlider.value, 10)), 
-        dropdown.value, 
+        inputValue,
+        getRandomPageCount(parseInt(rangeSlider.value, 10)),
+        dropdown.value,
         currentLang
       ); // Le prompt à envoyer
-    } 
+    }
     else if (inputValue && !isPDFUrl(activeTabUrl)){
       alert("Cette page n'est pas un pdf !");
     }
@@ -158,7 +158,7 @@ function downloadAsTxt(): void {
   a.download = 'resume.txt';
   a.click();
   URL.revokeObjectURL(url);
-  
+
 }
 
 
@@ -168,13 +168,13 @@ function downloadAsTxt(): void {
 document.addEventListener('DOMContentLoaded', function() {
   const pdfUrlContainer = document.getElementById('url-container');
   const pdfUrlElement = document.getElementById('pdf-url');
-  
-  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {    
+
+  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
     if (tabs && tabs.length > 0) {
       const activeTab = tabs[0];
-      
+
       activeTabUrl = activeTab.url;
-      
+
       if (activeTabUrl && isPDFUrl(activeTabUrl) && pdfUrlElement && pdfUrlContainer) {
         pdfUrlElement.textContent = activeTabUrl;
         pdfUrlContainer.style.display = 'block';

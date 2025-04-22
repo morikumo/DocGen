@@ -120,7 +120,9 @@ h1 {
 
 .prompt[contenteditable]:empty::before {
   content: "Describe your resume ->";
-  color:black;
+  color: black;
+  opacity: 0.5;
+
 }
 
 
