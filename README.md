@@ -1,12 +1,12 @@
 # 📄 DocGen
 
-**Summarize long texts, articles, or even code files — effortlessly.**
+**Summarize long texts, articles — effortlessly.**
 
 ---
 
 ## ✨ Why DocGen?
 
-DocGen is your smart assistant to generate clean, structured resumes or summaries from lengthy content. Whether you're working with articles, technical documents, or codebases, DocGen helps you get straight to the point.
+DocGen is your smart assistant to generate clean, structured resumes or summaries from lengthy content. He's only working on pdf url in navigator. Test it with a book online. Be carefull its only in navigator and online.
 
 ---
 
@@ -16,23 +16,13 @@ Wondering how DocGen makes your life easier? Here's how:
 
 - 📚 **Page control** — Choose the number of pages for your summary.
 - 🎨 **Thematic output** — Pick a theme or style for your generated resume.
-- 🧠 **UX/UI-focused** — Designed for clarity, ease of use, and a great user experience.
-- 🔁 **Iterative refinement** — Re-run for improved results until it fits your expectations.
 - 📎 **Source referencing** — Add citations directly into the document or in a note/syllabus format.
-- 💻 **Code file summaries** — It can also summarize code files with context.
-- 📁 **One file at a time (for now)** — Currently processes one file, with multi-file support planned.
 
 ---
 
 ## 🚧 Coming Soon
-
-- Multi-file document support
-- Export options (PDF, Markdown, Notion sync, etc.)
 - AI model selection
 - Custom formatting rules
-- Hot reload
-- Implement react
-- Implement docker for multi members
 
 ---
 
